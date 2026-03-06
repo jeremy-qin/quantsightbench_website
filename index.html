@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PIBench - Prediction Interval Benchmark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">PI</span>
+        <span class="logo-text">Bench</span>
+      </a>
+      <div class="nav-links">
+        <a href="#leaderboard">Leaderboard</a>
+        <a href="#findings">Findings</a>
+        <a href="#analysis">Analysis</a>
+        <a href="#methodology">Methodology</a>
+        <a href="#about">About</a>
+        <a href="https://github.com" class="nav-github" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge">Benchmark</div>
+      <h1 class="hero-title">PIBench</h1>
+      <p class="hero-subtitle">Prediction Interval Benchmark for Large Language Models</p>
+      <p class="hero-description">
+        How well can LLMs quantify uncertainty? PIBench evaluates frontier models on their ability to produce
+        calibrated prediction intervals for 1,000 real-world forecasting questions from
+        <a href="https://www.openforesight.org/" target="_blank" rel="noopener">Open Foresight</a>.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value">10</span>
+          <span class="stat-label">Models</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">1,000</span>
+          <span class="stat-label">Questions</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">7</span>
+          <span class="stat-label">Providers</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">90%</span>
+          <span class="stat-label">Target Coverage</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Leaderboard -->
+  <section id="leaderboard" class="section">
+    <div class="container">
+      <h2 class="section-title">Leaderboard</h2>
+      <p class="section-desc">
+        Models ranked by <strong>Mean Log Interval Score</strong> (lower is better).
+        One representative configuration per model family at default reasoning effort.
+      </p>
+
+      <div class="filters">
+        <div class="filter-group">
+          <label>Sort by:</label>
+          <select id="sortSelect" class="sort-select">
+            <option value="coverage">Coverage</option>
+            <option value="mean_log_is">Mean Log IS</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="leaderboard-table" id="leaderboardTable">
+          <thead>
+            <tr>
+              <th class="col-rank">#</th>
+              <th class="col-model">Model</th>
+              <th class="col-provider">Provider</th>
+              <th class="col-metric sortable" data-col="coverage">Coverage <span class="sort-arrow active-sort">&#9650;</span></th>
+              <th class="col-metric sortable" data-col="mean_log_is">Mean Log IS <span class="sort-arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Findings -->
+  <section id="findings" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Key Findings</h2>
+      <p class="section-desc">
+        Analysis across 34 model configurations reveals systematic patterns in how LLMs handle uncertainty quantification.
+      </p>
+
+      <div class="findings-grid">
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3>Systematic Underconfidence</h3>
+          <p>All models produce intervals that are <strong>too narrow</strong>. The best model (GPT-5.1 med) achieves only 78.4% coverage against a 90% target. No model reaches the desired calibration level.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3>Reasoning Effort Matters</h3>
+          <p>Higher reasoning effort consistently improves coverage across all providers. Opus 4.5 improves from 65.4% (low) to 72.5% (high), while maintaining similar interval quality.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <h3>Agentic Retrieval Helps Sharpness</h3>
+          <p>Models with web search access produce <strong>sharper intervals</strong> (lower median IS: 40-69 vs 70-98), though coverage gains are mixed. Kimi K2 Thinking benefits the most from retrieval augmentation.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <h3>Prompt Design Has Large Impact</h3>
+          <p>The informed prompt (with background context) consistently outperforms zero-shot across all models. For GLM-4.7, adding context improves mean log IS from 10.9 to 9.41, a 14% improvement.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+          </div>
+          <h3>No Single Winner</h3>
+          <p>Kimi K2.5 achieves the best mean log IS of 6.33, followed by Opus 4.5 at 6.74. GPT-5.1 leads in coverage at 78.4%. The top models span multiple providers, showing no single dominant approach.</p>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Coverage vs. Mean Log IS</h3>
+          <p class="chart-desc">Each point is a model. The ideal model would be in the top-left corner (high coverage, low score).</p>
+          <div class="chart-container">
+            <canvas id="scatterChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Coverage by Provider</h3>
+          <p class="chart-desc">Models grouped by provider. The dashed line marks the 90% target coverage.</p>
+          <div class="chart-container">
+            <canvas id="coverageChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive Analysis -->
+  <section id="analysis" class="section">
+    <div class="container">
+      <h2 class="section-title">Deep Dive Analysis</h2>
+      <p class="section-desc">
+        Detailed analysis across reasoning effort levels, prompt settings, and calibration behavior.
+      </p>
+
+      <div class="analysis-stack">
+        <!-- Reasoning Effort -->
+        <div class="analysis-card-full">
+          <h3>Reasoning Effort Effect</h3>
+          <p class="chart-desc">Coverage and mean log IS across low, medium, and high reasoning effort for 4 frontier models. Higher effort consistently improves Opus 4.5 and Sonnet 4.5, while GPT-5.1 peaks at medium. Gemini 3 Pro was only tested at low and high.</p>
+          <div class="dual-chart">
+            <div class="dual-chart-panel">
+              <h4>Coverage (%)</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="reasoningCoverage"></canvas>
+              </div>
+            </div>
+            <div class="dual-chart-panel">
+              <h4>Mean Log IS (lower = better)</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="reasoningLogIS"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Comparison -->
+        <div class="analysis-card-full">
+          <h3>Prompt Settings Comparison</h3>
+          <p class="chart-desc">Coverage and mean log IS across three prompt configurations: zero-shot (no context), informed (with background context), and agentic (informed + web search retrieval). The informed prompt outperforms zero-shot on most models, while agentic retrieval dramatically improves GLM-4.7 and Kimi K2 Thinking.</p>
+          <div class="dual-chart">
+            <div class="dual-chart-panel">
+              <h4>Coverage (%)</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="settingsCoverage"></canvas>
+              </div>
+            </div>
+            <div class="dual-chart-panel">
+              <h4>Mean Log IS (lower = better)</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="settingsLogIS"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calibration -->
+        <div class="analysis-card-full">
+          <h3>Calibration Across Confidence Levels</h3>
+          <p class="chart-desc">Target vs. actual coverage at 80%, 90%, and 95% confidence levels. The dashed diagonal represents perfect calibration. All models fall below it, confirming systematic underconfidence. GPT-5.1 is closest to calibrated, while Gemini 3 Pro shows the largest gap.</p>
+          <div class="dual-chart">
+            <div class="dual-chart-panel">
+              <h4>Target vs. Actual Coverage</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="calibrationCoverage"></canvas>
+              </div>
+            </div>
+            <div class="dual-chart-panel">
+              <h4>Mean Log IS by Target Coverage</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="calibrationLogIS"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Methodology -->
+  <section id="methodology" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Methodology</h2>
+
+      <div class="methodology-grid">
+        <div class="method-card">
+          <div class="method-number">1</div>
+          <h3>Dataset</h3>
+          <p>1,000 resolved forecasting questions from <a href="https://www.openforesight.org/" target="_blank" rel="noopener">Open Foresight</a> (September 2025 snapshot). Questions span diverse domains including economics, politics, science, technology, and society, with numeric outcomes.</p>
+        </div>
+        <div class="method-card">
+          <div class="method-number">2</div>
+          <h3>Task</h3>
+          <p>Each model receives a forecasting question and must produce a <strong>90% prediction interval</strong> (lower bound, median, upper bound). The interval should contain the true outcome 90% of the time while being as narrow as possible.</p>
+        </div>
+        <div class="method-card">
+          <div class="method-number">3</div>
+          <h3>Scoring</h3>
+          <p>We use the <strong>Interval Score</strong> (Gneiting &amp; Raftery, 2007), which rewards narrow intervals and penalizes missed coverage. The log-transformed mean is our primary metric. A penalty is added for invalid/unparseable outputs.</p>
+        </div>
+        <div class="method-card">
+          <div class="method-number">4</div>
+          <h3>Configurations</h3>
+          <p>Models are tested across multiple axes: <strong>reasoning effort</strong> (low/medium/high), <strong>prompt setting</strong> (zero-shot vs informed), and <strong>retrieval augmentation</strong> (standard vs agentic with web search). This yields 34 total configurations.</p>
+        </div>
+      </div>
+
+      <div class="metrics-explainer">
+        <h3>Metrics Glossary</h3>
+        <div class="metrics-table-wrapper">
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Description</th>
+                <th>Ideal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Mean Log IS</code></td>
+                <td>Mean of log-transformed interval scores across all valid predictions. Primary ranking metric.</td>
+                <td>Lower is better</td>
+              </tr>
+              <tr>
+                <td><code>Coverage</code></td>
+                <td>Fraction of questions where the ground truth falls within the predicted interval.</td>
+                <td>0.90 (= 90%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section-title">About</h2>
+      <div class="about-content">
+        <p>
+          PIBench is a benchmark for evaluating the uncertainty quantification capabilities of large language models.
+          Unlike traditional benchmarks that focus on point predictions, PIBench assesses whether models can produce
+          well-calibrated prediction intervals that accurately reflect their epistemic uncertainty.
+        </p>
+        <p>
+          The benchmark uses real-world forecasting questions with known resolutions, making it a practical test of
+          probabilistic reasoning. All questions come from the <a href="https://www.openforesight.org/" target="_blank" rel="noopener">Open Foresight</a>
+          platform, ensuring diverse, high-quality evaluation data.
+        </p>
+        <div class="about-links">
+          <a href="https://github.com" class="about-link" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            GitHub Repository
+          </a>
+          <a href="https://arxiv.org" class="about-link" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Paper (coming soon)
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>PIBench &copy; 2025. Built to advance uncertainty quantification in LLMs.</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
