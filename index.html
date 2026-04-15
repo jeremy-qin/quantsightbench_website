@@ -21,9 +21,9 @@
       </a>
       <div class="nav-links">
         <a href="#leaderboard">Leaderboard</a>
+        <a href="#data">Data</a>
         <a href="#findings">Findings</a>
         <a href="#analysis">Analysis</a>
-        <a href="#data">Data</a>
         <a href="#methodology">Methodology</a>
         <a href="#about">About</a>
         <a href="https://github.com" class="nav-github" target="_blank" rel="noopener">
@@ -96,186 +96,6 @@
           </thead>
           <tbody id="leaderboardBody"></tbody>
         </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- Key Findings -->
-  <section id="findings" class="section section-alt">
-    <div class="container">
-      <h2 class="section-title">Key Findings</h2>
-      <p class="section-desc">
-        Results under the agentic setting reveal systematic patterns in how LLMs handle numerical uncertainty quantification.
-      </p>
-
-      <div class="findings-grid">
-        <div class="finding-card">
-          <div class="finding-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-          </div>
-          <h3>Systematic Overconfidence</h3>
-          <p>No model reaches the 90% target. Gemini 3.1 Pro leads at <strong>79.1%</strong> coverage; DeepSeek v3.2 trails at 61.5%. The consistent shortfall indicates intervals that are too narrow for the stated confidence level.</p>
-        </div>
-        <div class="finding-card">
-          <div class="finding-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 17l4-8 4 4 4-10"/></svg>
-          </div>
-          <h3>Coverage Degrades with Scale</h3>
-          <p>Coverage exceeds 80% for values in the 1–10 range but falls below 65% once magnitudes reach 100K+. Mean Log IS spikes at the high end, reaching <strong>23.7 for Gemini 3 Pro</strong> — scale awareness is a core bottleneck.</p>
-        </div>
-        <div class="finding-card">
-          <div class="finding-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-          </div>
-          <h3>Iteration Signals Difficulty</h3>
-          <p>Aggregate coverage decreases monotonically with retrieval iterations, from <strong>~86% at one iteration to ~65% at five</strong>. Rather than hurting forecasts, more iterations flag harder questions the agent cannot confidently resolve.</p>
-        </div>
-        <div class="finding-card">
-          <div class="finding-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          </div>
-          <h3>Reasoning Effort Helps Unevenly</h3>
-          <p>Higher effort improves both coverage and sharpness overall. Opus 4.5 gains the most (65.4% → 72.6% coverage; MLIS 7.45 → 6.74), while already-performant GPT-5.1 sees little benefit.</p>
-        </div>
-        <div class="finding-card">
-          <div class="finding-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          </div>
-          <h3>Prompt Setting Matters</h3>
-          <p>Agentic retrieval beats background-context, which beats zero-shot. Gains are largest for open-weight models like <strong>GLM-4.7 and DeepSeek v3.2</strong>, narrowing the gap with frontier systems.</p>
-        </div>
-        <div class="finding-card">
-          <div class="finding-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>
-          </div>
-          <h3>Confidence Specification is Essential</h3>
-          <p>Removing the 90% confidence instruction drops GPT-5.4 from <strong>75.3% → 68.2%</strong> coverage (MLIS 7.32 → 11.44) and Opus 4.6 from 73.6% → 67.0%. Explicit targets are required for calibrated intervals.</p>
-        </div>
-      </div>
-
-      <!-- Charts -->
-      <div class="charts-grid">
-        <div class="chart-card">
-          <h3>Coverage vs. Mean Log IS</h3>
-          <p class="chart-desc">Each point is a model under the agentic setting. The ideal model sits in the top-left (high coverage, low score). GPT-5.1 and Gemini 3.1 Pro come closest.</p>
-          <div class="chart-container">
-            <canvas id="scatterChart"></canvas>
-          </div>
-        </div>
-        <div class="chart-card">
-          <h3>Coverage by Model</h3>
-          <p class="chart-desc">Empirical coverage of 90% prediction intervals. The dashed line marks the 90% target. No model reaches it.</p>
-          <div class="chart-container">
-            <canvas id="coverageChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Deep Dive Analysis -->
-  <section id="analysis" class="section">
-    <div class="container">
-      <h2 class="section-title">Deep Dive Analysis</h2>
-      <p class="section-desc">
-        Detailed analysis across reasoning effort levels, prompt settings, and calibration behavior.
-      </p>
-
-      <div class="analysis-stack">
-        <!-- Reasoning Effort -->
-        <div class="analysis-card-full">
-          <h3>Reasoning Effort Effect</h3>
-          <p class="chart-desc">Coverage and mean log IS across low, medium, and high reasoning effort under the background-context setting. Opus 4.5 benefits the most (coverage 65.4% → 72.6%), Sonnet 4.5 improves more modestly, and GPT-5.1 shows minimal gains — consistent with the paper's finding that extended reasoning helps when models are not yet saturated. Gemini 3 Pro was only tested at low and high.</p>
-          <div class="dual-chart">
-            <div class="dual-chart-panel">
-              <h4>Coverage (%)</h4>
-              <div class="chart-container chart-container-lg">
-                <canvas id="reasoningCoverage"></canvas>
-              </div>
-            </div>
-            <div class="dual-chart-panel">
-              <h4>Mean Log IS (lower = better)</h4>
-              <div class="chart-container chart-container-lg">
-                <canvas id="reasoningLogIS"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Settings Comparison -->
-        <div class="analysis-card-full">
-          <h3>Prompt Settings Comparison</h3>
-          <p class="chart-desc">Coverage and mean log IS across three prompt configurations: zero-shot (no context), background-context (with relevant grounding), and agentic (retrieval over a fixed news corpus). Background context generally improves over zero-shot; agentic retrieval improves further, with the most pronounced gains for open-weight models such as GLM-4.7 and DeepSeek v3.2. Frontier models show smaller relative improvements from agentic retrieval.</p>
-          <div class="dual-chart">
-            <div class="dual-chart-panel">
-              <h4>Coverage (%)</h4>
-              <div class="chart-container chart-container-lg">
-                <canvas id="settingsCoverage"></canvas>
-              </div>
-            </div>
-            <div class="dual-chart-panel">
-              <h4>Mean Log IS (lower = better)</h4>
-              <div class="chart-container chart-container-lg">
-                <canvas id="settingsLogIS"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Calibration -->
-        <div class="analysis-card-full">
-          <h3>Calibration Across Confidence Levels</h3>
-          <p class="chart-desc">Target vs. actual coverage at 80%, 90%, and 95% under the background-context setting. The dashed diagonal is perfect calibration. All three models fall below it, and the gap widens at higher targets — models widen intervals in response to higher confidence requests but not enough to reach the target. MLIS improves for GPT-5.1 and Opus 4.5 as the widening offsets miscoverage penalties; Gemini 3 Pro shows the opposite, suggesting less efficient widening.</p>
-          <div class="dual-chart">
-            <div class="dual-chart-panel">
-              <h4>Target vs. Actual Coverage</h4>
-              <div class="chart-container chart-container-lg">
-                <canvas id="calibrationCoverage"></canvas>
-              </div>
-            </div>
-            <div class="dual-chart-panel">
-              <h4>Mean Log IS by Target Coverage</h4>
-              <div class="chart-container chart-container-lg">
-                <canvas id="calibrationLogIS"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Confidence Specification Ablation -->
-        <div class="analysis-card-full">
-          <h3>Effect of Confidence Level Specification</h3>
-          <p class="chart-desc">Removing the 90% confidence instruction from the agentic prompt forces models to choose interval width implicitly. Both coverage and sharpness degrade substantially, indicating that explicit confidence targets serve as an important conditioning signal.</p>
-          <div class="metrics-table-wrapper">
-            <table class="metrics-table">
-              <thead>
-                <tr>
-                  <th>Confidence Instruction</th>
-                  <th>GPT-5.4 Coverage</th>
-                  <th>GPT-5.4 MLIS</th>
-                  <th>Opus 4.6 Coverage</th>
-                  <th>Opus 4.6 MLIS</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>None (inherent)</td>
-                  <td>68.24%</td>
-                  <td>11.44</td>
-                  <td>66.99%</td>
-                  <td>10.71</td>
-                </tr>
-                <tr>
-                  <td>90% specified</td>
-                  <td><strong>75.33%</strong></td>
-                  <td><strong>7.32</strong></td>
-                  <td><strong>73.60%</strong></td>
-                  <td><strong>7.00</strong></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -386,6 +206,186 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Findings -->
+  <section id="findings" class="section">
+    <div class="container">
+      <h2 class="section-title">Key Findings</h2>
+      <p class="section-desc">
+        Results under the agentic setting reveal systematic patterns in how LLMs handle numerical uncertainty quantification.
+      </p>
+
+      <div class="findings-grid">
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3>Systematic Overconfidence</h3>
+          <p>No model reaches the 90% target. Gemini 3.1 Pro leads at <strong>79.1%</strong> coverage; DeepSeek v3.2 trails at 61.5%. The consistent shortfall indicates intervals that are too narrow for the stated confidence level.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 17l4-8 4 4 4-10"/></svg>
+          </div>
+          <h3>Coverage Degrades with Scale</h3>
+          <p>Coverage exceeds 80% for values in the 1–10 range but falls below 65% once magnitudes reach 100K+. Mean Log IS spikes at the high end, reaching <strong>23.7 for Gemini 3 Pro</strong> — scale awareness is a core bottleneck.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <h3>Iteration Signals Difficulty</h3>
+          <p>Aggregate coverage decreases monotonically with retrieval iterations, from <strong>~86% at one iteration to ~65% at five</strong>. Rather than hurting forecasts, more iterations flag harder questions the agent cannot confidently resolve.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3>Reasoning Effort Helps Unevenly</h3>
+          <p>Higher effort improves both coverage and sharpness overall. Opus 4.5 gains the most (65.4% → 72.6% coverage; MLIS 7.45 → 6.74), while already-performant GPT-5.1 sees little benefit.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <h3>Prompt Setting Matters</h3>
+          <p>Agentic retrieval beats background-context, which beats zero-shot. Gains are largest for open-weight models like <strong>GLM-4.7 and DeepSeek v3.2</strong>, narrowing the gap with frontier systems.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>
+          </div>
+          <h3>Confidence Specification is Essential</h3>
+          <p>Removing the 90% confidence instruction drops GPT-5.4 from <strong>75.3% → 68.2%</strong> coverage (MLIS 7.32 → 11.44) and Opus 4.6 from 73.6% → 67.0%. Explicit targets are required for calibrated intervals.</p>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Coverage vs. Mean Log IS</h3>
+          <p class="chart-desc">Each point is a model under the agentic setting. The ideal model sits in the top-left (high coverage, low score). GPT-5.1 and Gemini 3.1 Pro come closest.</p>
+          <div class="chart-container">
+            <canvas id="scatterChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Coverage by Model</h3>
+          <p class="chart-desc">Empirical coverage of 90% prediction intervals. The dashed line marks the 90% target. No model reaches it.</p>
+          <div class="chart-container">
+            <canvas id="coverageChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive Analysis -->
+  <section id="analysis" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Deep Dive Analysis</h2>
+      <p class="section-desc">
+        Detailed analysis across reasoning effort levels, prompt settings, and calibration behavior.
+      </p>
+
+      <div class="analysis-stack">
+        <!-- Reasoning Effort -->
+        <div class="analysis-card-full">
+          <h3>Reasoning Effort Effect</h3>
+          <p class="chart-desc">Coverage and mean log IS across low, medium, and high reasoning effort under the background-context setting. Opus 4.5 benefits the most (coverage 65.4% → 72.6%), Sonnet 4.5 improves more modestly, and GPT-5.1 shows minimal gains — consistent with the paper's finding that extended reasoning helps when models are not yet saturated. Gemini 3 Pro was only tested at low and high.</p>
+          <div class="dual-chart">
+            <div class="dual-chart-panel">
+              <h4>Coverage (%)</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="reasoningCoverage"></canvas>
+              </div>
+            </div>
+            <div class="dual-chart-panel">
+              <h4>Mean Log IS (lower = better)</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="reasoningLogIS"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Comparison -->
+        <div class="analysis-card-full">
+          <h3>Prompt Settings Comparison</h3>
+          <p class="chart-desc">Coverage and mean log IS across three prompt configurations: zero-shot (no context), background-context (with relevant grounding), and agentic (retrieval over a fixed news corpus). Background context generally improves over zero-shot; agentic retrieval improves further, with the most pronounced gains for open-weight models such as GLM-4.7 and DeepSeek v3.2. Frontier models show smaller relative improvements from agentic retrieval.</p>
+          <div class="dual-chart">
+            <div class="dual-chart-panel">
+              <h4>Coverage (%)</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="settingsCoverage"></canvas>
+              </div>
+            </div>
+            <div class="dual-chart-panel">
+              <h4>Mean Log IS (lower = better)</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="settingsLogIS"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calibration -->
+        <div class="analysis-card-full">
+          <h3>Calibration Across Confidence Levels</h3>
+          <p class="chart-desc">Target vs. actual coverage at 80%, 90%, and 95% under the background-context setting. The dashed diagonal is perfect calibration. All three models fall below it, and the gap widens at higher targets — models widen intervals in response to higher confidence requests but not enough to reach the target. MLIS improves for GPT-5.1 and Opus 4.5 as the widening offsets miscoverage penalties; Gemini 3 Pro shows the opposite, suggesting less efficient widening.</p>
+          <div class="dual-chart">
+            <div class="dual-chart-panel">
+              <h4>Target vs. Actual Coverage</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="calibrationCoverage"></canvas>
+              </div>
+            </div>
+            <div class="dual-chart-panel">
+              <h4>Mean Log IS by Target Coverage</h4>
+              <div class="chart-container chart-container-lg">
+                <canvas id="calibrationLogIS"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Confidence Specification Ablation -->
+        <div class="analysis-card-full">
+          <h3>Effect of Confidence Level Specification</h3>
+          <p class="chart-desc">Removing the 90% confidence instruction from the agentic prompt forces models to choose interval width implicitly. Both coverage and sharpness degrade substantially, indicating that explicit confidence targets serve as an important conditioning signal.</p>
+          <div class="metrics-table-wrapper">
+            <table class="metrics-table">
+              <thead>
+                <tr>
+                  <th>Confidence Instruction</th>
+                  <th>GPT-5.4 Coverage</th>
+                  <th>GPT-5.4 MLIS</th>
+                  <th>Opus 4.6 Coverage</th>
+                  <th>Opus 4.6 MLIS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>None (inherent)</td>
+                  <td>68.24%</td>
+                  <td>11.44</td>
+                  <td>66.99%</td>
+                  <td>10.71</td>
+                </tr>
+                <tr>
+                  <td>90% specified</td>
+                  <td><strong>75.33%</strong></td>
+                  <td><strong>7.32</strong></td>
+                  <td><strong>73.60%</strong></td>
+                  <td><strong>7.00</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
