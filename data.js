@@ -1,4 +1,4 @@
-// PIBench Leaderboard Data — Default V3 models (one per family, default reasoning)
+// QuantSightBench Leaderboard Data — Default V3 models (one per family, default reasoning)
 const LEADERBOARD_DATA = [
   { model: "Kimi K2.5",       provider: "Moonshot",  coverage: 0.6993, mean_log_is: 6.327, median_is: 81.0, invalid: 82 },
   { model: "Opus 4.5",        provider: "Anthropic", coverage: 0.7252, mean_log_is: 6.736, median_is: 70.0, invalid: 72 },
