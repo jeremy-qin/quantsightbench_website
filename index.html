@@ -37,15 +37,14 @@
     <div class="container">
       <div class="hero-badge">Benchmark</div>
       <h1 class="hero-title">QuantSightBench</h1>
-      <p class="hero-subtitle">Prediction Interval Benchmark for Large Language Models</p>
+      <p class="hero-subtitle">Numerical Forecasting Benchmark for Large Language Models</p>
       <p class="hero-description">
-        How well can LLMs quantify uncertainty? QuantSightBench evaluates frontier models on their ability to produce
-        calibrated prediction intervals for 1,000 real-world forecasting questions from
-        <a href="https://www.openforesight.org/" target="_blank" rel="noopener">Open Foresight</a>.
+        How well can LLMs quantify uncertainty? QuantSightBench evaluates frontier and open-weight models on their ability to produce
+        calibrated 90% prediction intervals for 1,000 real-world numerical forecasting questions under an agentic retrieval setting.
       </p>
       <div class="hero-stats">
         <div class="stat">
-          <span class="stat-value">10</span>
+          <span class="stat-value">11</span>
           <span class="stat-label">Models</span>
         </div>
         <div class="stat">
@@ -69,8 +68,8 @@
     <div class="container">
       <h2 class="section-title">Leaderboard</h2>
       <p class="section-desc">
-        Models ranked by <strong>Mean Log Interval Score</strong> (lower is better).
-        One representative configuration per model family at default reasoning effort.
+        Results under the <strong>agentic setting</strong> at high reasoning effort on 1,000 questions.
+        Sort by <strong>Coverage</strong> (closer to 90% target is better) or <strong>Mean Log IS</strong> (lower is better).
       </p>
 
       <div class="filters">
@@ -105,7 +104,7 @@
     <div class="container">
       <h2 class="section-title">Key Findings</h2>
       <p class="section-desc">
-        Analysis across 34 model configurations reveals systematic patterns in how LLMs handle uncertainty quantification.
+        Results under the agentic setting reveal systematic patterns in how LLMs handle numerical uncertainty quantification.
       </p>
 
       <div class="findings-grid">
@@ -113,36 +112,43 @@
           <div class="finding-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
           </div>
-          <h3>Systematic Underconfidence</h3>
-          <p>All models produce intervals that are <strong>too narrow</strong>. The best model (GPT-5.1 med) achieves only 78.4% coverage against a 90% target. No model reaches the desired calibration level.</p>
+          <h3>Systematic Overconfidence</h3>
+          <p>No model reaches the 90% target. Gemini 3.1 Pro leads at <strong>79.1%</strong> coverage; DeepSeek v3.2 trails at 61.5%. The consistent shortfall indicates intervals that are too narrow for the stated confidence level.</p>
         </div>
         <div class="finding-card">
           <div class="finding-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 17l4-8 4 4 4-10"/></svg>
           </div>
-          <h3>Reasoning Effort Matters</h3>
-          <p>Higher reasoning effort consistently improves coverage across all providers. Opus 4.5 improves from 65.4% (low) to 72.5% (high), while maintaining similar interval quality.</p>
+          <h3>Coverage Degrades with Scale</h3>
+          <p>Coverage exceeds 80% for values in the 1–10 range but falls below 65% once magnitudes reach 100K+. Mean Log IS spikes at the high end, reaching <strong>23.7 for Gemini 3 Pro</strong> — scale awareness is a core bottleneck.</p>
         </div>
         <div class="finding-card">
           <div class="finding-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
           </div>
-          <h3>Agentic Retrieval Helps Sharpness</h3>
-          <p>Models with web search access produce <strong>sharper intervals</strong> (lower median IS: 40-69 vs 70-98), though coverage gains are mixed. Kimi K2 Thinking benefits the most from retrieval augmentation.</p>
+          <h3>Iteration Signals Difficulty</h3>
+          <p>Aggregate coverage decreases monotonically with retrieval iterations, from <strong>~86% at one iteration to ~65% at five</strong>. Rather than hurting forecasts, more iterations flag harder questions the agent cannot confidently resolve.</p>
+        </div>
+        <div class="finding-card">
+          <div class="finding-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3>Reasoning Effort Helps Unevenly</h3>
+          <p>Higher effort improves both coverage and sharpness overall. Opus 4.5 gains the most (65.4% → 72.6% coverage; MLIS 7.45 → 6.74), while already-performant GPT-5.1 sees little benefit.</p>
         </div>
         <div class="finding-card">
           <div class="finding-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
           </div>
-          <h3>Prompt Design Has Large Impact</h3>
-          <p>The informed prompt (with background context) consistently outperforms zero-shot across all models. For GLM-4.7, adding context improves mean log IS from 10.9 to 9.41, a 14% improvement.</p>
+          <h3>Prompt Setting Matters</h3>
+          <p>Agentic retrieval beats background-context, which beats zero-shot. Gains are largest for open-weight models like <strong>GLM-4.7 and DeepSeek v3.2</strong>, narrowing the gap with frontier systems.</p>
         </div>
         <div class="finding-card">
           <div class="finding-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>
           </div>
-          <h3>No Single Winner</h3>
-          <p>Kimi K2.5 achieves the best mean log IS of 6.33, followed by Opus 4.5 at 6.74. GPT-5.1 leads in coverage at 78.4%. The top models span multiple providers, showing no single dominant approach.</p>
+          <h3>Confidence Specification is Essential</h3>
+          <p>Removing the 90% confidence instruction drops GPT-5.4 from <strong>75.3% → 68.2%</strong> coverage (MLIS 7.32 → 11.44) and Opus 4.6 from 73.6% → 67.0%. Explicit targets are required for calibrated intervals.</p>
         </div>
       </div>
 
@@ -150,14 +156,14 @@
       <div class="charts-grid">
         <div class="chart-card">
           <h3>Coverage vs. Mean Log IS</h3>
-          <p class="chart-desc">Each point is a model. The ideal model would be in the top-left corner (high coverage, low score).</p>
+          <p class="chart-desc">Each point is a model under the agentic setting. The ideal model sits in the top-left (high coverage, low score). GPT-5.1 and Gemini 3.1 Pro come closest.</p>
           <div class="chart-container">
             <canvas id="scatterChart"></canvas>
           </div>
         </div>
         <div class="chart-card">
-          <h3>Coverage by Provider</h3>
-          <p class="chart-desc">Models grouped by provider. The dashed line marks the 90% target coverage.</p>
+          <h3>Coverage by Model</h3>
+          <p class="chart-desc">Empirical coverage of 90% prediction intervals. The dashed line marks the 90% target. No model reaches it.</p>
           <div class="chart-container">
             <canvas id="coverageChart"></canvas>
           </div>
@@ -178,7 +184,7 @@
         <!-- Reasoning Effort -->
         <div class="analysis-card-full">
           <h3>Reasoning Effort Effect</h3>
-          <p class="chart-desc">Coverage and mean log IS across low, medium, and high reasoning effort for 4 frontier models. Higher effort consistently improves Opus 4.5 and Sonnet 4.5, while GPT-5.1 peaks at medium. Gemini 3 Pro was only tested at low and high.</p>
+          <p class="chart-desc">Coverage and mean log IS across low, medium, and high reasoning effort under the background-context setting. Opus 4.5 benefits the most (coverage 65.4% → 72.6%), Sonnet 4.5 improves more modestly, and GPT-5.1 shows minimal gains — consistent with the paper's finding that extended reasoning helps when models are not yet saturated. Gemini 3 Pro was only tested at low and high.</p>
           <div class="dual-chart">
             <div class="dual-chart-panel">
               <h4>Coverage (%)</h4>
@@ -198,7 +204,7 @@
         <!-- Settings Comparison -->
         <div class="analysis-card-full">
           <h3>Prompt Settings Comparison</h3>
-          <p class="chart-desc">Coverage and mean log IS across three prompt configurations: zero-shot (no context), informed (with background context), and agentic (informed + web search retrieval). The informed prompt outperforms zero-shot on most models, while agentic retrieval dramatically improves GLM-4.7 and Kimi K2 Thinking.</p>
+          <p class="chart-desc">Coverage and mean log IS across three prompt configurations: zero-shot (no context), background-context (with relevant grounding), and agentic (retrieval over a fixed news corpus). Background context generally improves over zero-shot; agentic retrieval improves further, with the most pronounced gains for open-weight models such as GLM-4.7 and DeepSeek v3.2. Frontier models show smaller relative improvements from agentic retrieval.</p>
           <div class="dual-chart">
             <div class="dual-chart-panel">
               <h4>Coverage (%)</h4>
@@ -218,7 +224,7 @@
         <!-- Calibration -->
         <div class="analysis-card-full">
           <h3>Calibration Across Confidence Levels</h3>
-          <p class="chart-desc">Target vs. actual coverage at 80%, 90%, and 95% confidence levels. The dashed diagonal represents perfect calibration. All models fall below it, confirming systematic underconfidence. GPT-5.1 is closest to calibrated, while Gemini 3 Pro shows the largest gap.</p>
+          <p class="chart-desc">Target vs. actual coverage at 80%, 90%, and 95% under the background-context setting. The dashed diagonal is perfect calibration. All three models fall below it, and the gap widens at higher targets — models widen intervals in response to higher confidence requests but not enough to reach the target. MLIS improves for GPT-5.1 and Opus 4.5 as the widening offsets miscoverage penalties; Gemini 3 Pro shows the opposite, suggesting less efficient widening.</p>
           <div class="dual-chart">
             <div class="dual-chart-panel">
               <h4>Target vs. Actual Coverage</h4>
@@ -234,6 +240,41 @@
             </div>
           </div>
         </div>
+
+        <!-- Confidence Specification Ablation -->
+        <div class="analysis-card-full">
+          <h3>Effect of Confidence Level Specification</h3>
+          <p class="chart-desc">Removing the 90% confidence instruction from the agentic prompt forces models to choose interval width implicitly. Both coverage and sharpness degrade substantially, indicating that explicit confidence targets serve as an important conditioning signal.</p>
+          <div class="metrics-table-wrapper">
+            <table class="metrics-table">
+              <thead>
+                <tr>
+                  <th>Confidence Instruction</th>
+                  <th>GPT-5.4 Coverage</th>
+                  <th>GPT-5.4 MLIS</th>
+                  <th>Opus 4.6 Coverage</th>
+                  <th>Opus 4.6 MLIS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>None (inherent)</td>
+                  <td>68.24%</td>
+                  <td>11.44</td>
+                  <td>66.99%</td>
+                  <td>10.71</td>
+                </tr>
+                <tr>
+                  <td>90% specified</td>
+                  <td><strong>75.33%</strong></td>
+                  <td><strong>7.32</strong></td>
+                  <td><strong>73.60%</strong></td>
+                  <td><strong>7.00</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -247,22 +288,22 @@
         <div class="method-card">
           <div class="method-number">1</div>
           <h3>Dataset</h3>
-          <p>1,000 resolved forecasting questions from <a href="https://www.openforesight.org/" target="_blank" rel="noopener">Open Foresight</a> (September 2025 snapshot). Questions span diverse domains including economics, politics, science, technology, and society, with numeric outcomes.</p>
+          <p>1,000 resolved numerical forecasting questions built on the <em>OpenForecast</em> pipeline, spanning 8 domains (business &amp; finance, politics, infrastructure, culture, crime, sports, science &amp; health, education). Background articles are drawn from Jan–Aug 2025; resolution dates fall between Sep 2025 and Jan 2026 to prevent leakage.</p>
         </div>
         <div class="method-card">
           <div class="method-number">2</div>
           <h3>Task</h3>
-          <p>Each model receives a forecasting question and must produce a <strong>90% prediction interval</strong> (lower bound, median, upper bound). The interval should contain the true outcome 90% of the time while being as narrow as possible.</p>
+          <p>Each model receives a forecasting question and must produce a <strong>prediction interval at a specified confidence level</strong> — a lower and upper bound containing the true value with stated probability. Default evaluations use the 90% level.</p>
         </div>
         <div class="method-card">
           <div class="method-number">3</div>
           <h3>Scoring</h3>
-          <p>We use the <strong>Interval Score</strong> (Gneiting &amp; Raftery, 2007), which rewards narrow intervals and penalizes missed coverage. The log-transformed mean is our primary metric. A penalty is added for invalid/unparseable outputs.</p>
+          <p>We use the <strong>Winkler Interval Score</strong> (Gneiting &amp; Raftery, 2007), a proper scoring rule that jointly penalizes interval width and miscoverage. Because numerical quantities span many scales, we apply it to log-transformed values, yielding the <strong>Mean Log Interval Score (MLIS)</strong>.</p>
         </div>
         <div class="method-card">
           <div class="method-number">4</div>
           <h3>Configurations</h3>
-          <p>Models are tested across multiple axes: <strong>reasoning effort</strong> (low/medium/high), <strong>prompt setting</strong> (zero-shot vs informed), and <strong>retrieval augmentation</strong> (standard vs agentic with web search). This yields 34 total configurations.</p>
+          <p>Models are evaluated across three prompt <strong>settings</strong> (zero-shot, background-context, agentic retrieval over a 320K news-article corpus), three <strong>reasoning-effort</strong> levels (low/medium/high), and three target <strong>confidence levels</strong> (80%, 90%, 95%). The main leaderboard reports the agentic setting at high effort.</p>
         </div>
       </div>
 
@@ -301,14 +342,15 @@
       <h2 class="section-title">About</h2>
       <div class="about-content">
         <p>
-          QuantSightBench is a benchmark for evaluating the uncertainty quantification capabilities of large language models.
-          Unlike traditional benchmarks that focus on point predictions, QuantSightBench assesses whether models can produce
-          well-calibrated prediction intervals that accurately reflect their epistemic uncertainty.
+          QuantSightBench is a benchmark for evaluating the numerical forecasting capabilities of large language models.
+          Unlike benchmarks that evaluate forecasting through binary or multiple-choice outcomes, QuantSightBench assesses
+          whether models can produce well-calibrated prediction intervals for uncertain quantitative outcomes — a format
+          that is both closer to how people naturally reason about uncertainty and a demanding test of scale awareness and calibration.
         </p>
         <p>
-          The benchmark uses real-world forecasting questions with known resolutions, making it a practical test of
-          probabilistic reasoning. All questions come from the <a href="https://www.openforesight.org/" target="_blank" rel="noopener">Open Foresight</a>
-          platform, ensuring diverse, high-quality evaluation data.
+          The benchmark uses real-world numerical forecasting questions with known resolutions, drawn from the
+          <em>OpenForecast</em> pipeline. Background articles are restricted to Jan–Aug 2025 and resolution dates fall
+          between Sep 2025 and Jan 2026 to prevent data leakage.
         </p>
         <div class="about-links">
           <a href="https://github.com" class="about-link" target="_blank" rel="noopener">
