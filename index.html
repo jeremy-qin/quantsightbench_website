@@ -23,6 +23,7 @@
         <a href="#leaderboard">Leaderboard</a>
         <a href="#findings">Findings</a>
         <a href="#analysis">Analysis</a>
+        <a href="#data">Data</a>
         <a href="#methodology">Methodology</a>
         <a href="#about">About</a>
         <a href="https://github.com" class="nav-github" target="_blank" rel="noopener">
@@ -279,8 +280,119 @@
     </div>
   </section>
 
+  <!-- Data Details -->
+  <section id="data" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Data Details</h2>
+      <p class="section-desc">
+        QuantSightBench builds on the <em>OpenForecast</em> pipeline and filters to 1,000 quantitative
+        forecasting questions whose resolution depends on uncertain future outcomes — excluding items
+        answerable via straightforward calculation or factual recall.
+      </p>
+
+      <div class="data-stats">
+        <div class="data-stat">
+          <span class="data-stat-value">1,000</span>
+          <span class="data-stat-label">Forecasting questions</span>
+        </div>
+        <div class="data-stat">
+          <span class="data-stat-value">~320K</span>
+          <span class="data-stat-label">News articles in corpus</span>
+        </div>
+        <div class="data-stat">
+          <span class="data-stat-value">8</span>
+          <span class="data-stat-label">Domains covered</span>
+        </div>
+        <div class="data-stat">
+          <span class="data-stat-value">512</span>
+          <span class="data-stat-label">Tokens per chunk</span>
+        </div>
+      </div>
+
+      <div class="data-grid">
+        <div class="analysis-card-full">
+          <h3>Domain Distribution</h3>
+          <p class="chart-desc">The 1,000 questions span 8 domains. Labels were assigned by GPT-4.1-mini based on question title and background.</p>
+          <div class="metrics-table-wrapper">
+            <table class="metrics-table">
+              <thead>
+                <tr>
+                  <th>Domain</th>
+                  <th class="num">Count</th>
+                  <th class="num">%</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Business, Finance &amp; Technology</td><td class="num">258</td><td class="num">25.8</td></tr>
+                <tr><td>Politics &amp; Geopolitics</td><td class="num">185</td><td class="num">18.5</td></tr>
+                <tr><td>Infrastructure &amp; Transport</td><td class="num">122</td><td class="num">12.2</td></tr>
+                <tr><td>Culture &amp; Entertainment</td><td class="num">113</td><td class="num">11.3</td></tr>
+                <tr><td>Crime &amp; Legal</td><td class="num">101</td><td class="num">10.1</td></tr>
+                <tr><td>Sports</td><td class="num">96</td><td class="num">9.6</td></tr>
+                <tr><td>Science, Health &amp; Environment</td><td class="num">70</td><td class="num">7.0</td></tr>
+                <tr><td>Education</td><td class="num">55</td><td class="num">5.5</td></tr>
+                <tr><td><strong>Total</strong></td><td class="num"><strong>1,000</strong></td><td class="num"><strong>100.0</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="analysis-card-full">
+          <h3>Leakage Prevention</h3>
+          <p class="data-prose">
+            Numerical forecasting benefits from a natural temporal separation between training data and
+            evaluation targets. Background articles are drawn from <strong>January–August 2025</strong>,
+            while evaluated questions have resolution dates between
+            <strong>September 2025 and January 2026</strong>. All evaluated models have a documented
+            knowledge cutoff prior to September 2025.
+          </p>
+          <h3 class="data-subhead">Retrieval Corpus</h3>
+          <p class="data-prose">
+            The ~320,000-article corpus spans diverse international sources including Forbes, CNN,
+            Hindustan Times, Deutsche Welle, and Irish Times. Articles are de-duplicated, chunked into
+            512-token segments, and embedded with OpenAI's <code>text-embedding-3-large</code>. At
+            evaluation time the most relevant chunks are retrieved and provided to the model as context.
+          </p>
+        </div>
+      </div>
+
+      <div class="analysis-card-full">
+        <h3>Example Questions</h3>
+        <p class="chart-desc">Representative questions from the benchmark.</p>
+        <div class="metrics-table-wrapper">
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Background</th>
+                <th class="num">Answer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>What will be the annual silver supply deficit (in million ounces) in 2025?</td>
+                <td>The silver market faces structural deficits when demand exceeds supply, impacting prices and industrial availability.</td>
+                <td class="num">117.6</td>
+              </tr>
+              <tr>
+                <td>What is the annual climate finance commitment agreed upon by developed nations for developing countries by 2035?</td>
+                <td>Developed nations have pledged financial support to help developing countries transition to clean energy and adapt to climate change.</td>
+                <td class="num">300</td>
+              </tr>
+              <tr>
+                <td>How many fatalities were confirmed in the Air India Flight AI 171 crash by October 2025?</td>
+                <td>Air India Flight AI 171 crashed shortly after takeoff from Ahmedabad, leading to a major aviation disaster investigation.</td>
+                <td class="num">260</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Methodology -->
-  <section id="methodology" class="section section-alt">
+  <section id="methodology" class="section">
     <div class="container">
       <h2 class="section-title">Methodology</h2>
 
@@ -337,7 +449,7 @@
   </section>
 
   <!-- About -->
-  <section id="about" class="section">
+  <section id="about" class="section section-alt">
     <div class="container">
       <h2 class="section-title">About</h2>
       <div class="about-content">
