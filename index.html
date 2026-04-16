@@ -107,6 +107,33 @@
           <tbody id="leaderboardBody"></tbody>
         </table>
       </div>
+
+      <div class="metrics-explainer">
+        <h3>Metrics Glossary</h3>
+        <div class="metrics-table-wrapper">
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Description</th>
+                <th>Ideal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Coverage</code></td>
+                <td>Fraction of questions where the ground truth falls within the predicted interval. A well-calibrated model producing 90% intervals should achieve empirical coverage close to 90%. The leaderboard is sorted by coverage by default.</td>
+                <td>0.90 (= 90%)</td>
+              </tr>
+              <tr>
+                <td><code>Mean Log IS (MLIS)</code></td>
+                <td>Mean of the Winkler interval score applied to log-transformed values. The Winkler score is a proper scoring rule that jointly penalizes interval width and miscoverage — narrow intervals that miss the target are penalized proportionally to the miss distance. The log transform normalizes across scales, preventing large-magnitude questions from dominating the aggregate. A model with low MLIS produces intervals that are both sharp (narrow) and well-calibrated.</td>
+                <td>Lower is better</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -429,32 +456,6 @@
         </div>
       </div>
 
-      <div class="metrics-explainer">
-        <h3>Metrics Glossary</h3>
-        <div class="metrics-table-wrapper">
-          <table class="metrics-table">
-            <thead>
-              <tr>
-                <th>Metric</th>
-                <th>Description</th>
-                <th>Ideal</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>Mean Log IS</code></td>
-                <td>Mean of log-transformed interval scores across all valid predictions. Primary ranking metric.</td>
-                <td>Lower is better</td>
-              </tr>
-              <tr>
-                <td><code>Coverage</code></td>
-                <td>Fraction of questions where the ground truth falls within the predicted interval.</td>
-                <td>0.90 (= 90%)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   </section>
 
