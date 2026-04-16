@@ -270,11 +270,10 @@ code {
   background: var(--bg-card-hover);
   border-color: var(--accent);
 }
-}
 
 /* ===== Sections ===== */
 .section {
-  padding: 80px 0 120px;
+  padding: 100px 0 100px;
 }
 
 .section-alt {
