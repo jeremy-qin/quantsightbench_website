@@ -274,8 +274,7 @@ code {
 
 /* ===== Sections ===== */
 .section {
-  padding: 80px 0;
-  margin-bottom: 40px;
+  padding: 80px 0 120px;
 }
 
 .section-alt {
