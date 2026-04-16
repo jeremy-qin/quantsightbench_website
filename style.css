@@ -718,12 +718,23 @@ code {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 32px;
+  margin-top: 40px;
 }
 
 .metrics-explainer h3 {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 20px;
+}
+
+.metrics-explainer .metrics-table th:first-child,
+.metrics-explainer .metrics-table td:first-child {
+  min-width: 180px;
+}
+
+.metrics-explainer .metrics-table th:last-child,
+.metrics-explainer .metrics-table td:last-child {
+  min-width: 140px;
 }
 
 .metrics-table-wrapper {
