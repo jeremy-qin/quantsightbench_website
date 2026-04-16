@@ -801,6 +801,34 @@ code {
   line-height: 1.7;
 }
 
+.about-team {
+  margin-top: 28px;
+  margin-bottom: 8px;
+}
+
+.about-team h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.team-members {
+  font-size: 16px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.team-affiliations {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.team-affiliations sup {
+  font-size: 10px;
+  margin-right: 1px;
+}
+
 .about-links {
   display: flex;
   gap: 16px;
