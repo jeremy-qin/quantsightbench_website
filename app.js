@@ -52,10 +52,10 @@ function renderTable() {
       </td>
       <td class="metric-value">
         <div class="coverage-bar">
-          <span style="color:${coverageColor}">${coveragePct}%</span>
           <div class="coverage-fill">
             <div class="coverage-fill-inner" style="width:${coverageWidth}%;background:${coverageColor}"></div>
           </div>
+          <span style="color:${coverageColor}">${coveragePct}%</span>
         </div>
       </td>
       <td class="metric-value">${entry.mean_log_is.toFixed(3)}</td>

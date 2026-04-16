@@ -814,9 +814,10 @@ code {
 }
 
 .about-team h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 10px;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
 }
 
 .team-members {
