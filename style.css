@@ -492,6 +492,7 @@ code {
   text-align: right;
   font-family: 'JetBrains Mono', monospace;
   font-size: 15px;
+  font-variant-numeric: tabular-nums;
 }
 
 .coverage-bar {
@@ -499,6 +500,12 @@ code {
   align-items: center;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.coverage-bar > span {
+  min-width: 52px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .coverage-fill {
@@ -809,19 +816,20 @@ code {
 .about-team h3 {
   font-size: 18px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .team-members {
-  font-size: 16px;
+  font-size: 20px;
+  font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .team-affiliations {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.6;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
 }
 
 .team-affiliations sup {
